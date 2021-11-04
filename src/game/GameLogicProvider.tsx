@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer'
 import {createContext, useContext, Dispatch, ReactNode, useReducer} from 'react'
+import {Socket} from 'socket.io-client'
 
 import {DICE} from './constants'
 import {GameState, SquareState} from './types'
@@ -136,6 +137,7 @@ const initialState = generateInitialState()
 
 interface GameLogicProviderProps {
   children: (state: GameState) => ReactNode
+  socket: Socket
 }
 
 export default function GameLogicProvider(props: GameLogicProviderProps): JSX.Element {

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import {css} from '@emotion/react'
 
 import Square from './Square'
@@ -22,9 +23,8 @@ export default function PieceView(props: PieceViewProps): JSX.Element {
   return (
     <div css={cssContainer}>
       {shape.map((row, i) => (
-        <div>
+        <div key={`row-${i}`}>
           {row.map((square, j) => (
-            // eslint-disable-next-line react/no-array-index-key
             <Square key={`${pieceId}_${i}_${j}`} color={square ? color : 'white'} small />
           ))}
         </div>
