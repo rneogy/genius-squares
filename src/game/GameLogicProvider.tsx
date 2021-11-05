@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer'
-import {createContext, useContext, Dispatch, ReactNode, useReducer} from 'react'
-import {Socket} from 'socket.io-client'
+import {createContext, useContext, Dispatch, ReactNode, useReducer, useEffect} from 'react'
 
 import {DICE} from './constants'
 import {GameState, SquareState} from './types'
@@ -16,9 +15,9 @@ import {
 
 export const GameDispatchContext = createContext<Dispatch<GameStateAction> | null>(null)
 
-function generateInitialState(): GameState {
+function generateInitialState(presetBlockers?: string[]): GameState {
   // Roll the dice
-  const blockers = DICE.map((die) => die[Math.floor(Math.random() * 6)]).sort()
+  const blockers = presetBlockers || DICE.map((die) => die[Math.floor(Math.random() * 6)]).sort()
   const blockerIndices = blockers.map(coordinateToIndex)
   const board = [...Array(36)].map<SquareState>((_, i) => ({
     type: 'empty',
@@ -133,16 +132,22 @@ const reducer = produce((draft: GameState, action: GameStateAction) => {
   return draft
 })
 
-const initialState = generateInitialState()
-
 interface GameLogicProviderProps {
   children: (state: GameState) => ReactNode
-  socket: Socket
+  blockers?: string[]
+  onWin?: () => void
 }
 
 export default function GameLogicProvider(props: GameLogicProviderProps): JSX.Element {
-  const {children} = props
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const {children, blockers, onWin} = props
+  const [state, dispatch] = useReducer(reducer, generateInitialState(blockers))
+
+  useEffect(() => {
+    if (state.playerHasWon && onWin) {
+      onWin()
+    }
+  }, [state.playerHasWon, onWin])
+
   return (
     <GameDispatchContext.Provider value={dispatch}>{children(state)}</GameDispatchContext.Provider>
   )

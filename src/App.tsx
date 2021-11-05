@@ -3,10 +3,8 @@ import {StrictMode, useEffect, useState} from 'react'
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom'
 import {io, Socket} from 'socket.io-client'
 
-import GameLogicProvider from './game/GameLogicProvider'
-import GameView from './game/GameView'
-import GameLobby from './GameLobby'
 import Home from './Home'
+import Lobby from './lobby/Lobby'
 
 const cssGlobal = css`
   @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
@@ -41,12 +39,7 @@ export default function App(): JSX.Element {
             <Home socket={socket} />
           </Route>
           <Route path="/lobby/:lobbyId">
-            <GameLobby socket={socket} />
-          </Route>
-          <Route path="/game/:id">
-            <GameLogicProvider socket={socket}>
-              {(state) => <GameView state={state} />}
-            </GameLogicProvider>
+            <Lobby socket={socket} />
           </Route>
           <Redirect to="/" />
         </Switch>

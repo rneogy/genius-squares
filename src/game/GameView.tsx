@@ -34,10 +34,11 @@ const cssWinBanner = css`
 
 interface GameViewProps {
   state: GameState
+  multiplayer?: boolean
 }
 
 export default function GameView(props: GameViewProps): JSX.Element {
-  const {state} = props
+  const {state, multiplayer} = props
   const dispatch = useGameDispatch()
 
   return (
@@ -58,9 +59,11 @@ export default function GameView(props: GameViewProps): JSX.Element {
             <Confetti initialVelocityY={-10} recycle={false} />
           </>
         )}
-        <button type="button" onClick={() => dispatch({type: 'reset'})}>
-          {state.playerHasWon ? 'Play Again' : 'New Board'}
-        </button>
+        {!multiplayer && (
+          <button type="button" onClick={() => dispatch({type: 'reset'})}>
+            {state.playerHasWon ? 'Play Again' : 'New Board'}
+          </button>
+        )}
       </div>
     </div>
   )

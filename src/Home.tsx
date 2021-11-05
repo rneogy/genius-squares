@@ -4,12 +4,18 @@ import {useHistory} from 'react-router-dom'
 import {Socket} from 'socket.io-client'
 
 import Page from './Page'
+import {cssButton, cssInput} from './styles'
 
 const cssBody = css`
   flex: 1;
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin-top: 80px;
+
+  p {
+    font-size: 24px;
+  }
 
   > div {
     flex: 1;
@@ -24,37 +30,14 @@ const cssBody = css`
   }
 `
 
-const cssButton = css`
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  flex: 1;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: 0.2s;
-
-  :hover {
-    opacity: 0.9;
-  }
-
-  :disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`
-
-const cssInput = css`
-  padding: 10px;
-  border-radius: 5px;
-  flex: 0.5;
-  margin: 10px 0;
-  margin-right: 5px;
-`
-
 const cssRoomContainer = css`
   flex: 1;
   display: flex;
   flex-direction: row;
+
+  > input {
+    font-size: 24px;
+  }
 `
 
 interface HomeProps {
@@ -111,12 +94,12 @@ export default function Home(props: HomeProps): JSX.Element {
           <button
             type="button"
             css={cssButton}
-            style={{backgroundColor: '#90BE6D'}}
+            style={{backgroundColor: '#90BE6D', flex: 1}}
             onClick={handleCreateLobby}
           >
             New Game
           </button>
-          <div style={{textAlign: 'center'}}>or</div>
+          <div style={{textAlign: 'center', flex: 0}}>or</div>
           <div css={cssRoomContainer}>
             <input
               type="text"
@@ -127,11 +110,12 @@ export default function Home(props: HomeProps): JSX.Element {
               }
               onKeyDown={handleKeyDown}
               css={cssInput}
+              style={{flex: 0.5}}
             />
             <button
               type="button"
               css={cssButton}
-              style={{backgroundColor: '#EA9010'}}
+              style={{backgroundColor: '#EA9010', flex: 1}}
               onClick={handleJoinLobby}
               disabled={lobbyCode.length !== 4}
             >
